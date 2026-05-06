@@ -1,5 +1,3 @@
-# design-system
-
 # Design System
 
 A Figma-first, GitHub-backed design system built with AI assistance.

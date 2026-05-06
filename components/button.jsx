@@ -34,11 +34,15 @@ const buttonVariants = cva(
   },
 )
 
+// Icon sizes that require an aria-label
+const iconSizes = ['icon', 'icon-sm', 'icon-lg']
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  'aria-label': ariaLabel,
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
@@ -46,9 +50,23 @@ function Button({
   }) {
   const Comp = asChild ? Slot : 'button'
 
+  // Warn in development if icon button is missing aria-label
+  if (
+    process.env.NODE_ENV === 'development' &&
+    size &&
+    iconSizes.includes(size) &&
+    !ariaLabel
+  ) {
+    console.warn(
+      `Button: Icon buttons (size="${size}") must have an aria-label for accessibility.`
+    )
+  }
+
   return (
     <Comp
+      type="button"
       data-slot="button"
+      aria-label={ariaLabel}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
